@@ -4,7 +4,11 @@ const app = express()
 const port = 3000
 
 const { Sequelize, DataTypes, Model } = require('sequelize');
-const sequelize = new Sequelize('mysql://root:root@localhost:3306/benchmark')
+const sequelize = new Sequelize('benchmark', 'root', 'root', {
+    dialect: 'mysql',
+
+    logging: false
+})
 
 class Person extends Model { }
 Person.init({
@@ -42,7 +46,7 @@ Account.init({
     timestamps: false,
     modelName: 'account'
 });
-Person.hasOne(Account, {foreignKey : 'person_id'});
+Person.hasOne(Account, { foreignKey: 'person_id' });
 
 async function fetchData(url) {
     try {
@@ -84,7 +88,7 @@ function randomStr() {
 }
 
 app.get('/', async (req, res) => {
-    for (i = 0; i < 50; i++) {
+    for (i = 0; i < 100; i++) {
         const name = await generateName(),
             dob = new Date().toISOString().slice(0, 10);
 
@@ -93,11 +97,11 @@ app.get('/', async (req, res) => {
     }
     await Person.findAll({
         include: [{
-          model: Account
+            model: Account
         }]
-      })
-    await Account.destroy({where: {}})
-    await Person.destroy({where: {}})
+    })
+    await Account.destroy({ where: {} })
+    await Person.destroy({ where: {} })
     res.send('Hello World!')
 })
 

@@ -54,7 +54,7 @@ function randomStr() {
 }
 
 app.get('/', async (req, res) => {
-    for (i = 0; i < 50; i++) {
+    for (i = 0; i < 100; i++) {
         const name = await generateName(),
             dob = new Date().toISOString().slice(0, 10);
 
